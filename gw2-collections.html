@@ -66,8 +66,6 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
       <iron-pages selected="{{ selectedTab }}">
         <template is="dom-repeat" items="[[ data ]]" as="type">
           <div>
-            <h1>[[ type.name ]] collections</h1>
-            Collections in this type:
             <ul>
               <template is="dom-repeat" items="[[ type.collections ]]" as="collection">
                 <li>[[ collection.name ]]
