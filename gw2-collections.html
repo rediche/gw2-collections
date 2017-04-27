@@ -1,4 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../gw2api-items/gw2api-items.html">
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
 
@@ -14,22 +17,67 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
     <style>
       :host {
         display: block;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
+                    0 1px 2px rgba(0,0,0,0.24);
+      }
+
+      paper-tabs {
+        background-color: var(--gw2-collections-background-color, #009688);
+        color: var(--gw2-collections-color, #ffffff);
+        font-family: var(--gw2-collections-font-family, sans-serif);
+      }
+
+      paper-tab {
+        text-transform: uppercase;
+      }
+
+      paper-tab.iron-selected {
+        font-weight: 700;
+      }
+
+      .content {
+        padding: 1rem;
+        font-family: var(--gw2-collections-font-family, sans-serif)
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
+
+    <paper-tabs selected="{{ selectedTab }}">
+      <paper-tab>Basic Collections</paper-tab>
+      <paper-tab>Rare Collections</paper-tab>
+      <paper-tab>Black Lion Collections</paper-tab>
+    </paper-tabs>
+
+    <div class="content">
+      <iron-pages selected="{{ selectedTab }}">
+        <div>Basic collections</div>
+        <div>Rare collections</div>
+        <div>Black Lion collections</div>
+      </iron-pages>
+    </div>
   </template>
 
   <script>
     /** @polymerElement */
     class Gw2Collections extends Polymer.Element {
       static get is() { return 'gw2-collections'; }
+
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'gw2-collections'
+          selectedTab: {
+            type: Number,
+            value: '0'
+          },
+          
+          itemData: {
+            type: Object,
+            observer: '_itemDataChanged'
           }
         };
+      }
+
+      _itemDataChanged(itemData) {
+        console.log("ItemData", itemData);
       }
     }
 
