@@ -22,8 +22,10 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
       }
 
       paper-tabs {
-        background-color: var(--gw2-collections-background-color, #009688);
-        color: var(--gw2-collections-color, #ffffff);
+        --paper-tabs-selection-bar-color: #00695C;
+
+        background-color: var(--gw2-collections-background-color, #80CBC4);
+        color: var(--gw2-collections-color, #00695C);
         font-family: var(--gw2-collections-font-family, sans-serif);
       }
 
@@ -35,6 +37,12 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         font-weight: 700;
       }
 
+      paper-tab img {
+        height: 32px;
+        width: 32px;
+        margin-right: 8px;
+      }
+
       .content {
         padding: 1rem;
         font-family: var(--gw2-collections-font-family, sans-serif)
@@ -43,9 +51,15 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
     <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
 
     <paper-tabs selected="{{ selectedTab }}">
-      <paper-tab>Basic Collections</paper-tab>
-      <paper-tab>Rare Collections</paper-tab>
-      <paper-tab>Black Lion Collections</paper-tab>
+      <paper-tab>
+        <img src="[[ importPath ]]/images/Basic_Collections.png" alt="Basic Collections">
+        Basic</paper-tab>
+      <paper-tab>
+        <img src="[[ importPath ]]/images/Rare_Collections.png" alt="Rare Collections">
+        Rare</paper-tab>
+      <paper-tab>
+        <img src="[[ importPath ]]/images/Black_Lion_Collections.png" alt="Basic Collections">
+        Black Lion</paper-tab>
     </paper-tabs>
 
     <div class="content">
