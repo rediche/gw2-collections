@@ -70,7 +70,14 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
             Collections in this type:
             <ul>
               <template is="dom-repeat" items="[[ type.collections ]]" as="collection">
-                <li>[[ collection.name ]]</li>
+                <li>[[ collection.name ]]
+                  <ul>
+                    <gw2api-items auto ids="[[ _convertToString(collection.item_ids) ]]" response="{{ collection.items }}"></gw2api-items>
+                    <template is="dom-repeat" items="[[ collection.items ]]" as="item">
+                      <li>[[ item.name ]]</li>
+                    </template>
+                  </ul>
+                </li>
               </template>
             </ul>
           </div>
@@ -104,6 +111,11 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
 
       _itemDataChanged(itemData) {
         console.log("ItemData", itemData);
+      }
+
+      _convertToString(input) {
+        console.log("Input", input);
+        return String(input);
       }
     }
 
