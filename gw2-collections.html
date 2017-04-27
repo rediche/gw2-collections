@@ -1,0 +1,38 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<!--
+`gw2-collections`
+Generate a paper styled GW2 Collections interface to get an easy overview of prices etc.
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2-collections">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /** @polymerElement */
+    class Gw2Collections extends Polymer.Element {
+      static get is() { return 'gw2-collections'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'gw2-collections'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(Gw2Collections.is, Gw2Collections);
+  </script>
+</dom-module>
