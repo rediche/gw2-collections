@@ -1,0 +1,59 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../gw2api-items/gw2api-items.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<!--
+`gw2-collections-data`
+Generate a the data for gw2-collections.html
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2-collections-data">
+  <template>
+    <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
+  </template>
+
+  <script>
+    /** @polymerElement */
+    class Gw2CollectionsData extends Polymer.Element {
+      static get is() { return 'gw2-collections-data'; }
+
+      static get properties() {
+        return {
+          data: {
+            type: Object,
+            notify: true,
+            value: [{
+              name: "Basic",
+              icon: "Basic_Collections.png"
+            },{
+              name: "Rare",
+              icon: "Rare_Collections.png"
+            },{
+              name: "Black Lion",
+              icon: "Black_Lion_Collections.png"
+            }]
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        // When possible, use afterNextRender to defer non-critical
+        // work until after first paint.
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          this._populateData();
+        });
+      }
+
+      _populateData() {
+        console.log("Populating collection data...");
+      }
+    }
+
+    window.customElements.define(Gw2CollectionsData.is, Gw2CollectionsData);
+  </script>
+</dom-module>

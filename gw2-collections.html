@@ -3,7 +3,9 @@
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../gw2api-items/gw2api-items.html">
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
-<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="./gw2-collections-data.html">
 
 <!--
 `gw2-collections`
@@ -48,25 +50,23 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         font-family: var(--gw2-collections-font-family, sans-serif)
       }
     </style>
+    <gw2-collections-data data="{{ data }}"></gw2-collections-data>
     <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
 
     <paper-tabs selected="{{ selectedTab }}">
-      <paper-tab>
-        <img src="[[ importPath ]]/images/Basic_Collections.png" alt="Basic Collections">
-        Basic</paper-tab>
-      <paper-tab>
-        <img src="[[ importPath ]]/images/Rare_Collections.png" alt="Rare Collections">
-        Rare</paper-tab>
-      <paper-tab>
-        <img src="[[ importPath ]]/images/Black_Lion_Collections.png" alt="Basic Collections">
-        Black Lion</paper-tab>
+      <template is="dom-repeat" items="[[ data ]]">
+        <paper-tab>
+          <img src="[[ importPath ]]/images/[[ item.icon ]]" alt="Basic Collections">
+          [[ item.name ]]
+        </paper-tab>
+      </template>
     </paper-tabs>
 
     <div class="content">
       <iron-pages selected="{{ selectedTab }}">
-        <div>Basic collections</div>
-        <div>Rare collections</div>
-        <div>Black Lion collections</div>
+        <template is="dom-repeat" items="[[ data ]]">
+          <div>[[ item.name ]] collections</div>
+        </template>
       </iron-pages>
     </div>
   </template>
@@ -81,6 +81,10 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
           selectedTab: {
             type: Number,
             value: '0'
+          },
+
+          data: {
+            type: Object
           },
           
           itemData: {
