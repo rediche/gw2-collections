@@ -54,18 +54,26 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
     <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
 
     <paper-tabs selected="{{ selectedTab }}">
-      <template is="dom-repeat" items="[[ data ]]">
+      <template is="dom-repeat" items="[[ data ]]" as="type">
         <paper-tab>
-          <img src="[[ importPath ]]/images/[[ item.icon ]]" alt="Basic Collections">
-          [[ item.name ]]
+          <img src="[[ importPath ]]/images/[[ type.icon ]]" alt="[[ type.name ]] Collections">
+          [[ type.name ]]
         </paper-tab>
       </template>
     </paper-tabs>
 
     <div class="content">
       <iron-pages selected="{{ selectedTab }}">
-        <template is="dom-repeat" items="[[ data ]]">
-          <div>[[ item.name ]] collections</div>
+        <template is="dom-repeat" items="[[ data ]]" as="type">
+          <div>
+            <h1>[[ type.name ]] collections</h1>
+            Collections in this type:
+            <ul>
+              <template is="dom-repeat" items="[[ type.collections ]]" as="collection">
+                <li>[[ collection.name ]]</li>
+              </template>
+            </ul>
+          </div>
         </template>
       </iron-pages>
     </div>

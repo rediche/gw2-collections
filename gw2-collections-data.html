@@ -13,6 +13,11 @@ Generate a the data for gw2-collections.html
 <dom-module id="gw2-collections-data">
   <template>
     <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
+
+    <gw2api-items auto 
+      ids="14882,14883,14884,14885,14886,14887,14888,14889,14890,14891,14892,14893,14894,14895,14896,14897,14898,14899,14900"
+      response="{{ itemData }}">
+    </gw2api-items>
   </template>
 
   <script>
@@ -25,16 +30,9 @@ Generate a the data for gw2-collections.html
           data: {
             type: Object,
             notify: true,
-            value: [{
-              name: "Basic",
-              icon: "Basic_Collections.png"
-            },{
-              name: "Rare",
-              icon: "Rare_Collections.png"
-            },{
-              name: "Black Lion",
-              icon: "Black_Lion_Collections.png"
-            }]
+            value: function() {
+              return this._defaultData();
+            }
           }
         };
       }
@@ -51,6 +49,30 @@ Generate a the data for gw2-collections.html
 
       _populateData() {
         console.log("Populating collection data...");
+      }
+
+      _defaultData() {
+        return [{
+          name: "Basic",
+          icon: "Basic_Collections.png",
+          collections: [{
+            name: "Hylek Historian",
+            item_ids: [14882, 14883, 14884, 14885, 14886, 14887, 14888, 14889, 14890, 14891, 14892, 14893, 14894, 14895, 14896, 14897, 14898, 14899, 14900],
+            items: null
+          },{
+            name: "Grawl Archaeological Study",
+            item_ids: [46042, 46043, 46044, 46045, 46046, 46047, 46048, 46049, 46050, 46051, 46052, 46053, 46054, 46055, 46056, 46057, 46058, 46059, 46060],
+            items: null
+          }]
+        },{
+          name: "Rare",
+          icon: "Rare_Collections.png",
+          collections: null
+        },{
+          name: "Black Lion",
+          icon: "Black_Lion_Collections.png",
+          collections: null
+        }];
       }
     }
 
