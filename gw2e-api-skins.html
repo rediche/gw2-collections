@@ -1,0 +1,106 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+
+<!--
+`gw2e-api-skins`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2e-api-skins">
+  <script>
+    /** @polymerElement */
+    class Gw2eApiSkins extends Polymer.Element {
+      static get is() { return 'gw2e-api-skins'; }
+
+      static get properties() {
+        return {
+          urlBase: {
+            type: String,
+            value: 'https://api.gw2efficiency.com/'
+          },
+
+          urlEndpoint: {
+            type: String,
+            value: 'skins'
+          },
+
+          /**
+           * An array of skin IDs to request.
+           * 
+           * @type {Array|Undefined}
+           */
+          skinIds: {
+            type: Array
+          },
+
+          computedSkinIds: {
+            type: String,
+            computed: '_computeSkinIds(skinIds)'
+          },
+
+          response: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * Should the request run straight away?
+           * 
+           * @type {Boolean|Undefined}
+           */
+          auto: {
+            type: Boolean
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        // When possible, use afterNextRender to defer non-critical
+        // work until after first paint.
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          if (this.auto === true) {
+            this.generateRequest();
+          }
+        });
+      }
+
+      /**
+       * Compute skin IDs
+       */
+      _computeSkinIds(skinIds) {
+        return '?ids=' + this.skinIds.toString();
+      }
+
+      /**
+       * Manually generate the request
+       */
+      generateRequest() {
+        const that = this;
+
+        let url = this.urlBase + this.urlEndpoint;
+        
+        if (this.computedSkinIds) {
+          url = url + this.computedSkinIds;
+        }
+
+        fetch(url).then(function(response) {
+          return response.json();
+        }).then(function(json) {
+          if (json.length === 1) {
+            return that.response = json[0];
+          }
+
+          return that.response = json;
+        });
+      }
+
+    }
+
+    window.customElements.define(Gw2eApiSkins.is, Gw2eApiSkins);
+  </script>
+</dom-module>

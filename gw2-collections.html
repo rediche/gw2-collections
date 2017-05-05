@@ -4,6 +4,7 @@
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="./gw2-collections-data.html">
+<link rel="import" href="./gw2-collections-list.html">
 
 <!--
 `gw2-collections`
@@ -23,9 +24,6 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
 
       paper-tabs {
         --paper-tabs-selection-bar-color: #00695C;
-
-        background-color: var(--gw2-collections-background-color, #80CBC4);
-        color: var(--gw2-collections-color, #00695C);
         font-family: var(--gw2-collections-font-family, sans-serif);
       }
 
@@ -43,6 +41,11 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         margin-right: 8px;
       }
 
+      .colored-bg {
+        color: var(--gw2-collections-color, #333333);
+        background-color: var(--gw2-collections-background-color, #80CBC4);
+      }
+
       .content {
         padding: 1rem;
         font-family: var(--gw2-collections-font-family, sans-serif)
@@ -51,7 +54,12 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
 
     <gw2-collections-data data="{{ data }}"></gw2-collections-data>
 
-    <paper-tabs selected="{{ selectedTab }}">
+    <div class="content colored-bg">
+      <h1>Collections</h1>
+      <p>[[ data.description ]]</p>
+    </div>
+
+    <paper-tabs class="colored-bg" selected="{{ selectedTab }}">
       <template is="dom-repeat" items="[[ data.categories ]]" as="category">
         <paper-tab>
           <img src="[[ category.icon ]]" alt="[[ category.name ]] Collections">
@@ -63,14 +71,7 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
     <iron-pages selected="{{ selectedTab }}">
       <template is="dom-repeat" items="[[ data.categories ]]" as="category">
         <div class="content">
-          [[ category.name ]]
-
-          <ul>
-            <template is="dom-repeat" items="[[ category.achievements ]]" as="collection">
-              <li>[[ collection ]]</li>
-            </template>
-          </ul>
-
+          <gw2-collections-list collection-ids="[[ category.achievements ]]"></gw2-collections-list>
         </div>
       </template>
     </iron-pages>

@@ -1,0 +1,61 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="./gw2api-achievements.html">
+<link rel="import" href="./gw2-collections-items.html">
+
+<!--
+`gw2-collections-list`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2-collections-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <gw2api-achievements auto
+      ids="[[ collectionIds ]]"
+      response="{{ response }}"></gw2api-achievements>
+
+    <ul>
+      <template is="dom-repeat" items="[[ response ]]" as="collection">
+        <li>
+          <span>[[ collection.name ]]</span>
+          <gw2-collections-items items="[[ collection.bits ]]"></gw2-collections-items>
+        </li>
+      </template>
+    </ul>
+  </template>
+
+  <script>
+    /** @polymerElement */
+    class Gw2CollectionsList extends Polymer.Element {
+      static get is() { return 'gw2-collections-list'; }
+
+      static get properties() {
+        return {
+          collectionIds: {
+            type: Array
+          },
+
+          response: {
+            type: Object,
+            observer: '_handleResponse'
+          }
+        };
+      }
+
+      _handleResponse(response) {
+        return //console.log("Response:", response);
+      }
+    }
+
+    window.customElements.define(Gw2CollectionsList.is, Gw2CollectionsList);
+  </script>
+</dom-module>

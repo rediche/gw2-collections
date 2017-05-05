@@ -1,0 +1,134 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../gw2api-items/gw2api-items.html">
+<link rel="import" href="./gw2e-api-skins.html">
+
+<!--
+`gw2-collections-items`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2-collections-items">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <gw2api-items
+      id="itemRequester"
+      ids="[[ itemIds ]]"
+      response="{{ itemResponse }}"></gw2api-items>
+
+    <gw2e-api-skins
+      id="skinRequester"
+      skin-ids="[[ skinIds ]]"
+      response="{{ skinResponse }}"></gw2e-api-skins>
+
+    <ul>
+      <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
+        <li>
+          <img src="[[ item.icon ]]" alt="[[ item.name ]]">
+          <span>[[ item.name ]]</span>
+        </li>
+      </template>
+      <template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
+        <li>
+          <img src="[[ skin.icon ]]" alt="[[ skin.name ]]">
+          <span>[[ skin.name ]]</span>
+        </li>
+      </template>
+    </ul>
+  </template>
+
+  <script>
+    /** @polymerElement */
+    class Gw2CollectionsItems extends Polymer.Element {
+      static get is() { return 'gw2-collections-items'; }
+
+      static get properties() {
+        return {
+          items: {
+            type: Array,
+            observer: '_handleItems'
+          },
+
+          skinIds: {
+            type: Array
+          },
+
+          /**
+           * This should be an array
+           * but gw2api-items needs
+           * a string atm
+           */
+          itemIds: {
+            type: String
+          },
+
+          skinResponse: {
+            type: Object,
+            observer: '_handleSkinResponse'
+          },
+
+          itemResponse: {
+            type: Object,
+            observer: '_handleItemResponse'
+          },
+
+          skinsResponded: {
+            type: Array
+          },
+
+          itemsResponded: {
+            type: Array
+          }
+        };
+      }
+
+      _handleItems(items) {
+        const itemIds = [];
+        const skinIds = [];
+
+        items.forEach(function(item) {
+          switch (item.type) {
+            case 'Skin':
+              return skinIds.push(item.id);
+            case 'Item':
+              return itemIds.push(item.id);
+            default:
+              return;
+          }
+        });
+
+        if (skinIds.length > 0) {
+          this.skinIds = skinIds;
+          this.$.skinRequester.generateRequest();
+        }
+        
+        if (itemIds.length > 0) {
+          this.itemIds = itemIds.toString();
+          this.$.itemRequester.generateRequest();
+        }
+
+        return;
+      }
+
+      _handleSkinResponse(response) {
+        //console.log("Response:", response);
+        return this.skinsResponded = response;
+      }
+
+      _handleItemResponse(response) {
+        //console.log("Response:", response);
+        return this.itemsResponded = response;
+      }
+    }
+
+    window.customElements.define(Gw2CollectionsItems.is, Gw2CollectionsItems);
+  </script>
+</dom-module>
