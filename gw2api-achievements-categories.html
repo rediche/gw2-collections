@@ -4,16 +4,16 @@
 <!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
 
 <!--
-`gw2api-achievements-groups`
-Sends requests to the GW2 API Endpoint /v2/achievements/groups
+`gw2api-achievements-categories`
+Sends requests to the GW2 API Endpoint /v2/achievements/categories
 
 @demo demo/index.html
 -->
 
-<dom-module id="gw2api-achievements-groups">
+<dom-module id="gw2api-achievements-categories">
   <template>
     <iron-ajax
-      id="groupRequester"
+      id="categoryRequester"
       url="[[ urlBase ]][[ urlEndpoint ]]"
       params="[[ params ]]"
       handle-as="json"
@@ -23,8 +23,8 @@ Sends requests to the GW2 API Endpoint /v2/achievements/groups
 
   <script>
     /** @polymerElement */
-    class Gw2APIAchievementsGroups extends Polymer.Element {
-      static get is() { return 'gw2api-achievements-groups'; }
+    class Gw2APIAchievementsCategories extends Polymer.Element {
+      static get is() { return 'gw2api-achievements-categories'; }
 
       static get properties() {
         return {
@@ -35,16 +35,16 @@ Sends requests to the GW2 API Endpoint /v2/achievements/groups
 
           urlEndpoint: {
             type: String,
-            value: 'v2/achievements/groups'
+            value: 'v2/achievements/categories'
           },
 
           /**
-           * A string of Achievement Group IDs you want to request data for.
+           * An array of Achievement Group IDs you want to request data for.
            * 
-           * @type {String|Undefined}
+           * @type {Array|Undefined}
            */
           ids: {
-            type: String,
+            type: Array,
             observer: '_generateParams'
           },
 
@@ -77,7 +77,7 @@ Sends requests to the GW2 API Endpoint /v2/achievements/groups
           if (this.auto === true) {
             //console.log("Running request...");
             //console.log("Params:", this.params);
-            this.$.groupRequester.generateRequest();
+            this.$.categoryRequester.generateRequest();
           }
         });
       }
@@ -86,8 +86,9 @@ Sends requests to the GW2 API Endpoint /v2/achievements/groups
        * Generate the params object
        */
       _generateParams(ids) {
+        //console.log("IDs changed:", this.ids.toString());
         return this.params = {
-          ids: this.ids
+          ids: decodeURI(this.ids.toString())
         }
       }
 
@@ -130,6 +131,6 @@ Sends requests to the GW2 API Endpoint /v2/achievements/groups
 
     }
 
-    window.customElements.define(Gw2APIAchievementsGroups.is, Gw2APIAchievementsGroups);
+    window.customElements.define(Gw2APIAchievementsCategories.is, Gw2APIAchievementsCategories);
   </script>
 </dom-module>

@@ -1,7 +1,10 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../gw2api-items/gw2api-items.html">
+<!--<link rel="import" href="../gw2api-items/gw2api-items.html">-->
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<link rel="import" href="./gw2api-achievements-groups.html">
+<link rel="import" href="./gw2api-achievements-categories.html">
 
 <!--
 `gw2-collections-data`
@@ -12,12 +15,14 @@ Generate a the data for gw2-collections.html
 
 <dom-module id="gw2-collections-data">
   <template>
-    <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
+    <gw2api-achievements-groups auto 
+      ids="45410F60-AB66-4146-A0F7-CE99250C4CB0"
+      response="{{ achievementGroupsResponse }}"></gw2api-achievements-groups>
 
-    <gw2api-items
-      id="itemScraper"
-      response="{{ lastRespondedData }}">
-    </gw2api-items>
+    <gw2api-achievements-categories auto
+      id="achievementCategories"
+      ids="[[ whitelistCategories ]]"
+      response="{{ achievementCategoriesResponse }}"></gw2api-achievements-categories>
   </template>
 
   <script>
@@ -30,60 +35,101 @@ Generate a the data for gw2-collections.html
           data: {
             type: Object,
             notify: true,
-            observer: '_dataChanged',
-            value: function() {
-              return this._defaultData();
-            }
+            computed: '_computeData(description, categories)',
+            observer: '_dataChanged'
+          },
+
+          description: {
+            type: String
+          },
+
+          categories: {
+            type: Object
+          },
+
+          /**
+           * Whitelisted achievement categories
+           */
+          whitelistCategories: {
+            type: Array,
+            value: [77, 75, 76]
+          },
+
+          /**
+           * Whitelisted achivement collections
+           */
+          whitelistCollections: {
+            type: Array,
+            value: [1717, 1745]
           },
 
           lastRespondedData: {
             type: Object
+          },
+
+          achievementGroupsResponse: {
+            type: Object,
+            observer: '_handleAchievementGroupResponse'
+          },
+
+          achievementCategoriesResponse: {
+            type: Object,
+            observer: '_handleAchievementCategoryResponse'
           }
         };
       }
 
-      _dataChanged(data) {
-        console.log("Data changed!", data);
+      /*static get observers() {
+        return [
+          '_dataChanged(data.*)'
+        ]
+      }*/
+
+      _computeData(newDescription, newCategories) {
+        var newData = {
+          description: newDescription,
+          categories: newCategories
+        }
+
+        return newData;
       }
 
-      _defaultData() {
-        return [{
-          name: "Basic",
-          icon: "Basic_Collections.png",
-          collections: [{
-            name: "Hylek Historian",
-            item_ids: [14882, 14883, 14884, 14885, 14886, 14887, 14888, 14889, 14890, 14891, 14892, 14893, 14894, 14895, 14896, 14897, 14898, 14899, 14900],
-            items: null
-          },{
-            name: "Grawl Archaeological Study",
-            item_ids: [46042, 46043, 46044, 46045, 46046, 46047, 46048, 46049, 46050, 46051, 46052, 46053, 46054, 46055, 46056, 46057, 46058, 46059, 46060],
-            items: null
-          }]
-        },{
-          name: "Rare",
-          icon: "Rare_Collections.png",
-          collections: [{
-            name: "Acolyte of Dwayna",
-            item_ids: [31070, 31073, 39476, 39479],
-            items: null
-          },{
-            name: "Exotic Hunter",
-            item_ids: [44960, 44961, 44962, 44963, 44964, 44965, 44966, 44967, 44968, 44969, 44970, 44971, 44972, 44973, 44974, 44975, 44976, 44977, 44978, 44979, 44980, 44981, 44982, 44983, 44984, 44985, 44986, 44987, 44988, 44989, 44990, 44991, 44992, 44999],
-            items: null
-          },{
-            name: "Jormag Defense Guide",
-            item_ids: [14920, 14921, 14922, 14923, 14924, 14925, 14926, 14927, 14928, 14929, 14930, 14931, 14932, 14933, 14934, 14935, 14936, 14937, 14938, 31065, 31105, 67276],
-            items: null
-          },{
-            name: "Spirit Crafter",
-            item_ids: [31062, 31071, 31074, 31077, 31078],
-            items: null
-          }]
-        },{
-          name: "Black Lion",
-          icon: "Black_Lion_Collections.png",
-          collections: null
-        }];
+      _handleAchievementGroupResponse(response) {
+        return this.description = response.description;
+      }
+
+      _handleAchievementCategoryResponse(response) {
+        var collectionWhitelist = this.whitelistCollections;
+        //console.log("Response Cat:", response);
+        
+        // For each category in the response
+        response.forEach(function(category) {
+
+          // Make a new achivement list
+          var newAchievementList = [];
+
+          // For each item in the collection whitelist
+          collectionWhitelist.forEach(function(id) {
+            // Check if current whitelist ID is in the achievement list
+            var achievementIndex = category.achievements.indexOf(id);
+
+            // If it's in the achievement list
+            if (achievementIndex > -1) {
+              // Add that ID to the new achivement list
+              newAchievementList.push(id);
+            }
+          });
+
+          // Overwrite old achivement list
+          category.achievements = newAchievementList;
+        });
+
+        //console.log("After:", response);
+        this.categories = response;
+      }
+
+      _dataChanged(data) {
+        //console.log("Data changed!", data);
       }
     }
 

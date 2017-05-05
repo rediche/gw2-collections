@@ -1,11 +1,9 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-<!--<link rel="import" href="../gw2api-items/gw2api-items.html">-->
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="./gw2api-achievements-groups.html">
-<!--<link rel="import" href="./gw2-collections-data.html">-->
+<link rel="import" href="./gw2-collections-data.html">
 
 <!--
 `gw2-collections`
@@ -19,8 +17,8 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
     <style>
       :host {
         display: block;
-       /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
-                    0 1px 2px rgba(0,0,0,0.24);*/
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
+                    0 1px 2px rgba(0,0,0,0.24);
       }
 
       paper-tabs {
@@ -50,19 +48,34 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         font-family: var(--gw2-collections-font-family, sans-serif)
       }
     </style>
-    <!--<gw2-collections-data data="{{ data }}"></gw2-collections-data>-->
-    <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
 
-    <!--<paper-tabs selected="{{ selectedTab }}">
-      <template is="dom-repeat" items="[[ data ]]" as="type">
+    <gw2-collections-data data="{{ data }}"></gw2-collections-data>
+
+    <paper-tabs selected="{{ selectedTab }}">
+      <template is="dom-repeat" items="[[ data.categories ]]" as="category">
         <paper-tab>
-          <img src="[[ importPath ]]/images/[[ type.icon ]]" alt="[[ type.name ]] Collections">
-          [[ type.name ]]
+          <img src="[[ category.icon ]]" alt="[[ category.name ]] Collections">
+          [[ category.name ]]
         </paper-tab>
       </template>
     </paper-tabs>
 
-    <div class="content">
+    <iron-pages selected="{{ selectedTab }}">
+      <template is="dom-repeat" items="[[ data.categories ]]" as="category">
+        <div class="content">
+          [[ category.name ]]
+
+          <ul>
+            <template is="dom-repeat" items="[[ category.achievements ]]" as="collection">
+              <li>[[ collection ]]</li>
+            </template>
+          </ul>
+
+        </div>
+      </template>
+    </iron-pages>
+
+    <!--<div class="content">
       <iron-pages selected="{{ selectedTab }}">
         <template is="dom-repeat" items="[[ data ]]" as="type">
           <div>
@@ -83,7 +96,6 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
       </iron-pages>
     </div>-->
 
-    <gw2api-achievements-groups auto ids="45410F60-AB66-4146-A0F7-CE99250C4CB0"></gw2api-achievements-groups>
   </template>
 
   <script>
@@ -100,23 +112,30 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
 
           data: {
             type: Object
-          },
-          
-          itemData: {
-            type: Object,
-            observer: '_itemDataChanged'
           }
         };
       }
 
-      _itemDataChanged(itemData) {
-        console.log("ItemData", itemData);
+      static get observers() {
+        return [
+          '_dataChanged(data.*)'
+        ]
       }
+
+      _dataChanged(changedDataObject) {
+        if (changedDataObject.value === undefined) {
+          return;
+        }
+        
+        return console.log("New value:", changedDataObject.value);
+      }
+
+      /*
 
       _convertToString(input) {
         console.log("Input", input);
         return String(input);
-      }
+      }*/
     }
 
     window.customElements.define(Gw2Collections.is, Gw2Collections);
