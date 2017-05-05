@@ -63,7 +63,14 @@ Generate a the data for gw2-collections.html
            */
           whitelistCollections: {
             type: Array,
-            value: [1717, 1745]
+            value: [
+              1717, // Hylek Historian
+              1745, // Grawl Archaeological Study
+              1736, // Acolyte of Dwayna
+              1744, // Jormag Defense Guide
+              1752, // Spirit Crafter
+              1748  // Exotic Hunter
+            ]
           },
 
           lastRespondedData: {
@@ -108,23 +115,26 @@ Generate a the data for gw2-collections.html
         // For each category in the response
         response.forEach(function(category) {
 
-          // Make a new achivement list
-          var newAchievementList = [];
+          // Don't run this check for BL Collections, we need all of them
+          if (category.id !== 76) {
+            // Make a new achivement list
+            var newAchievementList = [];
 
-          // For each item in the collection whitelist
-          collectionWhitelist.forEach(function(id) {
-            // Check if current whitelist ID is in the achievement list
-            var achievementIndex = category.achievements.indexOf(id);
+            // For each item in the collection whitelist
+            collectionWhitelist.forEach(function(id) {
+              // Check if current whitelist ID is in the achievement list
+              var achievementIndex = category.achievements.indexOf(id);
 
-            // If it's in the achievement list
-            if (achievementIndex > -1) {
-              // Add that ID to the new achivement list
-              newAchievementList.push(id);
-            }
-          });
+              // If it's in the achievement list
+              if (achievementIndex > -1) {
+                // Add that ID to the new achivement list
+                newAchievementList.push(id);
+              }
+            });
 
-          // Overwrite old achivement list
-          category.achievements = newAchievementList;
+            // Overwrite old achivement list
+            category.achievements = newAchievementList;
+          }
         });
 
         //console.log("After:", response);
