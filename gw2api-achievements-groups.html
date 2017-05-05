@@ -1,0 +1,135 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<!--
+`gw2api-achievements-groups`
+Sends requests to the GW2 API Endpoint /v2/achievements/groups
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2api-achievements-groups">
+  <template>
+    <iron-ajax
+      id="groupRequester"
+      url="[[ urlBase ]][[ urlEndpoint ]]"
+      params="[[ params ]]"
+      handle-as="json"
+      on-response="_handleResponse"
+      on-error="_handleError"></iron-ajax>
+  </template>
+
+  <script>
+    /** @polymerElement */
+    class Gw2APIAchievementsGroups extends Polymer.Element {
+      static get is() { return 'gw2api-achievements-groups'; }
+
+      static get properties() {
+        return {
+          urlBase: {
+            type: String,
+            value: 'https://api.guildwars2.com/'
+          },
+
+          urlEndpoint: {
+            type: String,
+            value: 'v2/achievements/groups'
+          },
+
+          /**
+           * A string of Achievement Group IDs you want to request data for.
+           * 
+           * @type {String|Undefined}
+           */
+          ids: {
+            type: String,
+            observer: '_generateParams'
+          },
+
+          params: {
+            type: Object
+          },
+
+          response: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * Should the request run straight away?
+           * 
+           * @type {Boolean|Undefined}
+           */
+          auto: {
+            type: Boolean
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        // When possible, use afterNextRender to defer non-critical
+        // work until after first paint.
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          if (this.auto === true) {
+            console.log("Running request...");
+            console.log("Params:", this.params);
+            this.$.groupRequester.generateRequest();
+          }
+        });
+      }
+
+      /**
+       * Generate the params object
+       */
+      _generateParams(ids) {
+        return this.params = {
+          ids: this.ids
+        }
+      }
+
+      /**
+       * Handle a succesful request
+       */
+      _handleResponse(request) {
+
+        // Return just the object if only one object
+        // is in the returned array
+        if (request.detail.response.length === 1) {
+          console.log("Response", request.detail.response[0]);
+          return this.response = request.detail.response[0];
+        } 
+
+        console.log("Response", request.detail.response);
+        return this.response = request.detail.response;
+      }
+
+      /**
+       * Handle an unsuccesful request
+       */
+      _handleError(request) {
+        return console.error(request.detail.error, request);
+      }
+
+      /**
+       * Manually generate the request
+       */
+      generateRequest() {
+        return this.$.groupRequester.generateRequest();
+      }
+
+      /**
+       * Get the latest response
+       */
+      lastResponse() {
+        return this.response;
+      }
+
+    }
+
+    window.customElements.define(Gw2APIAchievementsGroups.is, Gw2APIAchievementsGroups);
+  </script>
+</dom-module>

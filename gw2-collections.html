@@ -1,11 +1,11 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-<link rel="import" href="../gw2api-items/gw2api-items.html">
+<!--<link rel="import" href="../gw2api-items/gw2api-items.html">-->
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
-
-<link rel="import" href="./gw2-collections-data.html">
+<link rel="import" href="./gw2api-achievements-groups.html">
+<!--<link rel="import" href="./gw2-collections-data.html">-->
 
 <!--
 `gw2-collections`
@@ -19,8 +19,8 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
     <style>
       :host {
         display: block;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
-                    0 1px 2px rgba(0,0,0,0.24);
+       /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
+                    0 1px 2px rgba(0,0,0,0.24);*/
       }
 
       paper-tabs {
@@ -50,10 +50,10 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         font-family: var(--gw2-collections-font-family, sans-serif)
       }
     </style>
-    <gw2-collections-data data="{{ data }}"></gw2-collections-data>
+    <!--<gw2-collections-data data="{{ data }}"></gw2-collections-data>-->
     <!--<gw2api-items auto ids="14885" response="{{ itemData }}"></gw2api-items>-->
 
-    <paper-tabs selected="{{ selectedTab }}">
+    <!--<paper-tabs selected="{{ selectedTab }}">
       <template is="dom-repeat" items="[[ data ]]" as="type">
         <paper-tab>
           <img src="[[ importPath ]]/images/[[ type.icon ]]" alt="[[ type.name ]] Collections">
@@ -81,7 +81,9 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
           </div>
         </template>
       </iron-pages>
-    </div>
+    </div>-->
+
+    <gw2api-achievements-groups auto ids="45410F60-AB66-4146-A0F7-CE99250C4CB0"></gw2api-achievements-groups>
   </template>
 
   <script>

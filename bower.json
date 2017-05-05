@@ -6,7 +6,8 @@
     "polymer": "Polymer/polymer#^2.0.0-rc.2",
     "gw2api-items": "^0.0.1",
     "paper-tabs": "PolymerElements/paper-tabs#2.0-preview",
-    "iron-pages": "PolymerElements/iron-pages#2.0-preview"
+    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
+    "iron-ajax": "PolymerElements/iron-ajax#2.0-preview"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
