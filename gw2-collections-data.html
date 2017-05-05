@@ -5,6 +5,7 @@
 
 <link rel="import" href="./gw2api-achievements-groups.html">
 <link rel="import" href="./gw2api-achievements-categories.html">
+<link rel="import" href="./gw2api-achievements.html">
 
 <!--
 `gw2-collections-data`
@@ -24,6 +25,9 @@ Generate a the data for gw2-collections.html
       ids="[[ whitelistCategories ]]"
       response="{{ achievementCategoriesResponse }}"></gw2api-achievements-categories>
 
+    <gw2api-achievements auto
+      ids="[[ test ]]"></gw2api-achievements>
+
       <!-- USE GW2E API (Allowed by Que) FOR GETTING ITEMS A SKIN CAN BE -->
       <!-- https://api.gw2efficiency.com/skins?ids=3904 -->
   </template>
@@ -40,6 +44,11 @@ Generate a the data for gw2-collections.html
             notify: true,
             computed: '_computeData(description, categories)',
             observer: '_dataChanged'
+          },
+
+          test: {
+            type: Array,
+            value: [1717, 1745]
           },
 
           description: {
@@ -109,12 +118,15 @@ Generate a the data for gw2-collections.html
       }
 
       _handleAchievementCategoryResponse(response) {
-        var collectionWhitelist = this.whitelistCollections;
-        //console.log("Response Cat:", response);
-        
-        // For each category in the response
-        response.forEach(function(category) {
+        var whitelistedResponse = this._removeNonWhitelistedAchievements(response);
+        this.categories = whitelistedResponse;
+      }
 
+      _removeNonWhitelistedAchievements(categories) {
+        var collectionWhitelist = this.whitelistCollections;
+
+        // For each category in the response
+        categories.forEach(function(category) {
           // Don't run this check for BL Collections, we need all of them
           if (category.id !== 76) {
             // Make a new achivement list
@@ -137,8 +149,7 @@ Generate a the data for gw2-collections.html
           }
         });
 
-        //console.log("After:", response);
-        this.categories = response;
+        return categories;
       }
 
       _dataChanged(data) {
