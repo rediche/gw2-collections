@@ -21,6 +21,19 @@
       .item-icon {
         height: 32px;
         width: 32px;
+        vertical-align
+      }
+
+      .item-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
       }
     </style>
 
@@ -34,17 +47,29 @@
       skin-ids="[[ skinIds ]]"
       response="{{ skinResponse }}"></gw2e-api-skins>
 
-    <ul>
+    <ul class="item-list">
       <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
-        <li>
-          <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
-          <span>[[ item.name ]]</span>
+        <li class="item">
+          <div class="item-header">
+            <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
+            <span>[[ item.name ]]</span>
+          </div>
+          <div class="item-prices">
+            <span class="buy">1g 2s 3c</span>
+            <span class="sell">1g 2s 3c</span>
+          </div>
         </li>
       </template>
       <template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
-        <li>
-          <img src="[[ skin.icon ]]" alt="[[ skin.name ]]" class="item-icon">
-          <span>[[ skin.name ]]</span>
+        <li class="item">
+          <div class="item-header">
+            <img src="[[ skin.icon ]]" alt="[[ skin.name ]]" class="item-icon">
+            <span>[[ skin.name ]]</span>
+          </div>
+          <div class="item-prices">
+            <span class="buy">1g 2s 3c</span>
+            <span class="sell">1g 2s 3c</span>
+          </div>
         </li>
       </template>
     </ul>
