@@ -1,6 +1,12 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
 <link rel="import" href="./gw2api-achievements.html">
 <link rel="import" href="./gw2-collections-items.html">
 
@@ -17,17 +23,40 @@
       :host {
         display: block;
       }
+
+      .collection-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0;
+      }
+
+      .collection-header {
+        border-bottom: 1px solid rgba(0, 0, 0, .12);
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .collection-name {
+        margin: 0;
+      }
     </style>
 
     <gw2api-achievements auto
       ids="[[ collectionIds ]]"
       response="{{ response }}"></gw2api-achievements>
 
-    <ul>
+    <ul class="collection-list">
       <template is="dom-repeat" items="[[ response ]]" as="collection">
-        <li>
-          <span>[[ collection.name ]]</span>
-          <gw2-collections-items items="[[ collection.bits ]]"></gw2-collections-items>
+        <li class="collection">
+          <div class="collection-header" on-tap="_toggleOpen">
+            <h3 class="collection-name">[[ collection.name ]]</h3>
+            <iron-icon icon="icons:expand-[[ collection.expand ]]"></iron-icon>
+          </div>
+          <template is="dom-if" if="[[ collection.open ]]">
+            <gw2-collections-items items="[[ collection.bits ]]"></gw2-collections-items>
+          </template>
         </li>
       </template>
     </ul>
@@ -35,7 +64,7 @@
 
   <script>
     /** @polymerElement */
-    class Gw2CollectionsList extends Polymer.Element {
+    class Gw2CollectionsList extends Polymer.GestureEventListeners(Polymer.Element) {
       static get is() { return 'gw2-collections-list'; }
 
       static get properties() {
@@ -52,7 +81,30 @@
       }
 
       _handleResponse(response) {
-        return //console.log("Response:", response);
+        //console.log("Initial Response:", response);
+
+        response.forEach(function(collection) {
+          collection.open = false;
+          collection.expand = "more";
+        });
+
+        //console.log("Modded response:", response);
+
+        return;
+      }
+
+      _toggleOpen(event) {
+        var model = event.model;
+
+        console.log(model);
+
+        if (model.collection.open) {
+          model.set('collection.expand', 'more');
+          return model.set('collection.open', false);
+        }
+
+        model.set('collection.expand', 'less');
+        return model.set('collection.open', true);
       }
     }
 

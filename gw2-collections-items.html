@@ -17,6 +17,11 @@
       :host {
         display: block;
       }
+
+      .item-icon {
+        height: 32px;
+        width: 32px;
+      }
     </style>
 
     <gw2api-items
@@ -32,13 +37,13 @@
     <ul>
       <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
         <li>
-          <img src="[[ item.icon ]]" alt="[[ item.name ]]">
+          <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
           <span>[[ item.name ]]</span>
         </li>
       </template>
       <template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
         <li>
-          <img src="[[ skin.icon ]]" alt="[[ skin.name ]]">
+          <img src="[[ skin.icon ]]" alt="[[ skin.name ]]" class="item-icon">
           <span>[[ skin.name ]]</span>
         </li>
       </template>

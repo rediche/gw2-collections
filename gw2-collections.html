@@ -70,9 +70,7 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
 
     <iron-pages selected="{{ selectedTab }}">
       <template is="dom-repeat" items="[[ data.categories ]]" as="category">
-        <div class="content">
-          <gw2-collections-list collection-ids="[[ category.achievements ]]"></gw2-collections-list>
-        </div>
+        <gw2-collections-list collection-ids="[[ category.achievements ]]"></gw2-collections-list>
       </template>
     </iron-pages>
 
