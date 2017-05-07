@@ -66,14 +66,14 @@
       response="{{ priceResponse }}"></gw2api-commerce-prices>
 
     <ul class="item-list">
-      <template is="dom-repeat" items="[[ itemsResponded ]]" as="item" mutable-data>
+      <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
         <li class="item">
           <div class="item-header">
             <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
-            <span>[[ item.name ]]</span>
+            <span>[[ index ]] - [[ item.name ]]</span>
           </div>
           <div class="item-prices">
-            <span class="buy">Buy: [[ item.buys.unit_price ]]</span>
+            <span class="buy">Buy: [[ _getPrice(index) ]]</span>
             <span class="sell">Sell: [[ item.sells.unit_price ]]</span>
           </div>
         </li>
@@ -129,10 +129,6 @@
           },
 
           priceResponse: {
-            type: Array
-          },
-
-          priceResponse: {
             type: Object,
             observer: '_handlePriceResponse'
           },
@@ -142,6 +138,10 @@
           },
 
           itemsResponded: {
+            type: Array
+          },
+
+          priceResponsed: {
             type: Array
           },
 
@@ -197,7 +197,9 @@
           return console.log("No IDs matched response");
         }
 
-        const that = this;
+        this.priceResponded = response;
+
+        /*const that = this;
 
         console.log("Response:", response);
         console.log("Intial Items", that.itemsResponded);
@@ -205,7 +207,7 @@
         var newItems = this.itemsResponded;
 
         response.forEach(function (price) {
-          const matchIndex = that.itemsResponded.findIndex(function (entry) {
+          const matchIndex = newItems.findIndex(function (entry) {
             return entry.id === price.id;
           });
 
@@ -217,10 +219,14 @@
         });
 
         this.itemsResponded = newItems;
-        console.log(this.itemsResponded);
+        console.log(this.itemsResponded);*/
 
         return;
       }
+
+      /* Possible to make a function that returns correct pricevalue from another array?
+       * the indexes will need to match too.
+       */
     }
 
     window.customElements.define(Gw2CollectionsItems.is, Gw2CollectionsItems);
