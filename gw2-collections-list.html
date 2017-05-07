@@ -22,6 +22,7 @@
     <style>
       :host {
         display: block;
+        font-size: 15px;
       }
 
       .collection-list {
@@ -38,6 +39,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
       }
 
       .collection:last-of-type .collection-header {
@@ -61,7 +63,7 @@
       <template is="dom-repeat" items="[[ response ]]" as="collection">
         <li class="collection">
           <div class$="collection-header [[ collection.expand ]]" on-tap="_toggleOpen">
-            <h3 class="collection-name">[[ collection.name ]]</h3>
+            <p class="collection-name">[[ collection.name ]]</p>
             <iron-icon icon="icons:expand-[[ collection.expand ]]"></iron-icon>
             <paper-ripple></paper-ripple>
           </div>
