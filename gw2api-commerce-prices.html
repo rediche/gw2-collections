@@ -1,0 +1,115 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<link rel="import" href="../iron-ajax/iron-ajax.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<!--
+`gw2api-commerce-prices`
+Sends requests to the GW2 API Endpoint /v2/commerce/prices
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2api-commerce/prices">
+  <script>
+    /** @polymerElement */
+    class Gw2APICommercePrices extends Polymer.Element {
+      static get is() { return 'gw2api-commerce-prices'; }
+
+      static get properties() {
+        return {
+          urlBase: {
+            type: String,
+            value: 'https://api.guildwars2.com/'
+          },
+
+          urlEndpoint: {
+            type: String,
+            value: 'v2/commerce/prices'
+          },
+
+          /**
+           * An array of Item IDs you want to request data for.
+           * 
+           * @type {Array|Undefined}
+           */
+          ids: {
+            type: Array
+          },
+
+          computedIds: {
+            type: String,
+            computed: '_computeIds(ids)'
+          },
+
+          response: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * Should the request run straight away?
+           * 
+           * @type {Boolean|Undefined}
+           */
+          auto: {
+            type: Boolean
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        // When possible, use afterNextRender to defer non-critical
+        // work until after first paint.
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          if (this.auto === true) {
+            this.generateRequest();
+          }
+        });
+      }
+
+      /**
+       * Compute IDs
+       */
+      _computeIds(ids) {
+        return '?ids=' + this.ids.toString();
+      }
+
+      /**
+       * Manually generate the request
+       */
+      generateRequest() {
+        const that = this;
+
+        let url = this.urlBase + this.urlEndpoint;
+
+        if (this.computedIds) {
+          url = url + this.computedIds;
+        }
+
+        fetch(url).then(function(response) {
+          return response.json();
+        }).then(function(json) {
+
+          if (json.length === 1) {
+            return that.response = json[0];
+          }
+          
+          return that.response = json;
+        });
+      }
+
+      /**
+       * Get the latest response
+       */
+      lastResponse() {
+        return this.response;
+      }
+
+    }
+
+    window.customElements.define(Gw2APICommercePrices.is, Gw2APICommercePrices);
+  </script>
+</dom-module>

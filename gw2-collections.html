@@ -78,28 +78,6 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         <gw2-collections-list collection-ids="[[ category.achievements ]]"></gw2-collections-list>
       </template>
     </iron-pages>
-
-    <!--<div class="content">
-      <iron-pages selected="{{ selectedTab }}">
-        <template is="dom-repeat" items="[[ data ]]" as="type">
-          <div>
-            <ul>
-              <template is="dom-repeat" items="[[ type.collections ]]" as="collection">
-                <li>[[ collection.name ]]
-                  <ul>
-                    <gw2api-items auto ids="[[ _convertToString(collection.item_ids) ]]" response="{{ collection.items }}"></gw2api-items>
-                    <template is="dom-repeat" items="[[ collection.items ]]" as="item">
-                      <li>[[ item.name ]]</li>
-                    </template>
-                  </ul>
-                </li>
-              </template>
-            </ul>
-          </div>
-        </template>
-      </iron-pages>
-    </div>-->
-
   </template>
 
   <script>

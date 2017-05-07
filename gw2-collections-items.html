@@ -2,6 +2,7 @@
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../gw2api-items/gw2api-items.html">
+<link rel="import" href="./gw2api-commerce-prices.html">
 <link rel="import" href="./gw2e-api-skins.html">
 
 <!--
@@ -59,6 +60,11 @@
       skin-ids="[[ skinIds ]]"
       response="{{ skinResponse }}"></gw2e-api-skins>
 
+    <gw2api-commerce-prices auto
+      id="priceRequester"
+      ids="[[ itemIds ]]"
+      response="{{ priceResponse }}"></gw2api-commerce-prices>
+
     <ul class="item-list">
       <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
         <li class="item">
@@ -72,7 +78,7 @@
           </div>
         </li>
       </template>
-      <template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
+      <!--<template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
         <li class="item">
           <div class="item-header">
             <img src="[[ skin.icon ]]" alt="[[ skin.name ]]" class="item-icon">
@@ -83,7 +89,7 @@
             <span class="sell">Sell: 1g 2s 3c</span>
           </div>
         </li>
-      </template>
+      </template>-->
     </ul>
   </template>
 
@@ -122,11 +128,24 @@
             observer: '_handleItemResponse'
           },
 
+          priceResponse: {
+            type: Array
+          },
+
+          priceResponse: {
+            type: Object,
+            observer: '_handlePriceResponse'
+          },
+
           skinsResponded: {
             type: Array
           },
 
           itemsResponded: {
+            type: Array
+          },
+
+          completedItemList: {
             type: Array
           }
         };
@@ -168,6 +187,12 @@
       _handleItemResponse(response) {
         //console.log("Response:", response);
         return this.itemsResponded = response;
+      }
+
+      _handlePriceResponse(response) {
+        console.log("Response:", response);
+
+        return;
       }
     }
 
