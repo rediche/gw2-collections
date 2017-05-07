@@ -21,7 +21,8 @@
       .item-icon {
         height: 32px;
         width: 32px;
-        vertical-align
+        vertical-align: middle;
+        margin-right: .5rem;
       }
 
       .item-list {
@@ -33,7 +34,18 @@
       .item {
         display: flex;
         justify-content: space-between;
-        padding: 1rem;
+        padding: .5rem 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, .12);
+      }
+
+      .item-header, .item-prices {
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+      }
+
+      .item-prices span {
+        margin-left: 1rem;
       }
     </style>
 
@@ -55,8 +67,8 @@
             <span>[[ item.name ]]</span>
           </div>
           <div class="item-prices">
-            <span class="buy">1g 2s 3c</span>
-            <span class="sell">1g 2s 3c</span>
+            <span class="buy">Buy: 1g 2s 3c</span>
+            <span class="sell">Sell: 1g 2s 3c</span>
           </div>
         </li>
       </template>
@@ -67,8 +79,8 @@
             <span>[[ skin.name ]]</span>
           </div>
           <div class="item-prices">
-            <span class="buy">1g 2s 3c</span>
-            <span class="sell">1g 2s 3c</span>
+            <span class="buy">Buy: 1g 2s 3c</span>
+            <span class="sell">Sell: 1g 2s 3c</span>
           </div>
         </li>
       </template>
