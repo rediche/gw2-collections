@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../app-layout/app-toolbar/app-toolbar.html">
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="./gw2-collections-data.html">
@@ -20,6 +21,7 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
         display: block;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
                     0 1px 2px rgba(0,0,0,0.24);
+        font-family: var(--gw2-collections-font-family, sans-serif);
       }
 
       paper-tabs {
@@ -58,10 +60,15 @@ Generate a paper styled GW2 Collections interface to get an easy overview of pri
 
     <gw2-collections-data data="{{ data }}"></gw2-collections-data>
 
-    <div class="content colored-bg">
+    <!--<div class="content colored-bg">
       <h1>Collections</h1>
       <p>[[ data.description ]]</p>
-    </div>
+    </div>-->
+
+    <app-toolbar class="colored-bg">
+      <div main-title>Collections</div>
+      <div>[[ data.description ]]</div>
+    </app-toolbar>
 
     <paper-tabs class="colored-bg" selected="{{ selectedTab }}">
       <template is="dom-repeat" items="[[ data.categories ]]" as="category">
