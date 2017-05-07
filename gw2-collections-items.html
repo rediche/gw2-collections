@@ -60,21 +60,21 @@
       skin-ids="[[ skinIds ]]"
       response="{{ skinResponse }}"></gw2e-api-skins>
 
-    <gw2api-commerce-prices auto
+    <gw2api-commerce-prices
       id="priceRequester"
       ids="[[ itemIds ]]"
       response="{{ priceResponse }}"></gw2api-commerce-prices>
 
     <ul class="item-list">
-      <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
+      <template is="dom-repeat" items="[[ itemsResponded ]]" as="item" mutable-data>
         <li class="item">
           <div class="item-header">
             <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
             <span>[[ item.name ]]</span>
           </div>
           <div class="item-prices">
-            <span class="buy">Buy: 1g 2s 3c</span>
-            <span class="sell">Sell: 1g 2s 3c</span>
+            <span class="buy">Buy: [[ item.buys.unit_price ]]</span>
+            <span class="sell">Sell: [[ item.sells.unit_price ]]</span>
           </div>
         </li>
       </template>
@@ -186,11 +186,38 @@
 
       _handleItemResponse(response) {
         //console.log("Response:", response);
-        return this.itemsResponded = response;
+        this.itemsResponded = response;
+        this.$.priceRequester.generateRequest();
+
+        return;
       }
 
       _handlePriceResponse(response) {
+        if (response.text) {
+          return console.log("No IDs matched response");
+        }
+
+        const that = this;
+
         console.log("Response:", response);
+        console.log("Intial Items", that.itemsResponded);
+
+        var newItems = this.itemsResponded;
+
+        response.forEach(function (price) {
+          const matchIndex = that.itemsResponded.findIndex(function (entry) {
+            return entry.id === price.id;
+          });
+
+          if (matchIndex !== -1) {
+            newItems[matchIndex].buys = price.buys;
+            newItems[matchIndex].sells = price.sells;
+            newItems[matchIndex].whitelisted = price.whitelisted;
+          }
+        });
+
+        this.itemsResponded = newItems;
+        console.log(this.itemsResponded);
 
         return;
       }
