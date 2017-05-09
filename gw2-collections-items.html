@@ -26,6 +26,13 @@
         padding-left: 0;
         margin: 0;
       }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        padding: .5rem 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, .12);
+      }
     </style>
 
     <gw2api-items
@@ -44,13 +51,16 @@
       response="{{ priceResponse }}"></gw2api-commerce-prices>
 
     <ul class="item-list">
+      <li class="total-price item">
+        Total price: <gw2-coin-output coin-string="101010"></gw2-coin-output>
+      </li>
       <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
-        <li class="item">
+        <li>
           <gw2-collections-item item="[[ item ]]"></gw2-collections-item>
         </li>
       </template>
       <template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
-        <li class="item">
+        <li>
           <gw2-collections-item item="[[ skin ]]"></gw2-collections-item>
         </li>
       </template>
