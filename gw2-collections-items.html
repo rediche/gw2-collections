@@ -73,7 +73,7 @@
             <span>[[ index ]] - [[ item.name ]]</span>
           </div>
           <div class="item-prices">
-            <span class="buy">Buy: [[ _getPrice(index) ]]</span>
+            <span class="buy">Buy: [[ item.buys.unit_price ]]</span>
             <span class="sell">Sell: [[ item.sells.unit_price ]]</span>
           </div>
         </li>
@@ -138,11 +138,13 @@
           },
 
           itemsResponded: {
-            type: Array
+            type: Array,
+            observer: '_handleItemsResponded'
           },
 
           priceResponsed: {
-            type: Array
+            type: Array,
+            observer: '_handlePriceResponded'
           },
 
           completedItemList: {
@@ -197,29 +199,34 @@
           return console.log("No IDs matched response");
         }
 
-        this.priceResponded = response;
+        /* Run handlePriceResponded manually */
+        this._handlePriceResponded(response);
 
-        /*const that = this;
+        return this.priceResponded = response;
+      }
 
-        console.log("Response:", response);
-        console.log("Intial Items", that.itemsResponded);
+      _handleItemsResponded(itemsResponded) {
+        console.log(itemsResponded);
+      }
 
-        var newItems = this.itemsResponded;
+      _handlePriceResponded(priceResponded) {
+        const that = this;
+        const itemsResponded = this.itemsResponded;
 
-        response.forEach(function (price) {
-          const matchIndex = newItems.findIndex(function (entry) {
+        console.log("Response:", priceResponded);
+        console.log("Intial Items", itemsResponded);
+
+        priceResponded.forEach(function (price) {
+          const matchIndex = itemsResponded.findIndex(function (entry) {
             return entry.id === price.id;
           });
 
           if (matchIndex !== -1) {
-            newItems[matchIndex].buys = price.buys;
-            newItems[matchIndex].sells = price.sells;
-            newItems[matchIndex].whitelisted = price.whitelisted;
+            that.set('itemsResponded.' + matchIndex + '.buys', price.buys);
+            that.set('itemsResponded.' + matchIndex + '.sells', price.sells);
+            that.set('itemsResponded.' + matchIndex + '.whitelisted', price.whitelisted);
           }
         });
-
-        this.itemsResponded = newItems;
-        console.log(this.itemsResponded);*/
 
         return;
       }
@@ -227,6 +234,10 @@
       /* Possible to make a function that returns correct pricevalue from another array?
        * the indexes will need to match too.
        */
+
+      /*_getPrice(index) {
+        console.log("Getting price...");
+      }*/
     }
 
     window.customElements.define(Gw2CollectionsItems.is, Gw2CollectionsItems);
