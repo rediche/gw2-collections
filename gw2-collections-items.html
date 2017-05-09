@@ -71,17 +71,23 @@
         <li class="item">
           <div class="item-header">
             <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
-            <span>[[ index ]] - [[ item.name ]]</span>
+            <span>[[ item.name ]]</span>
           </div>
           <div class="item-prices">
             <template is="dom-if" if="[[ item.buys.unit_price ]]">
               <span class="buy">
-                Buy: <gw2-coin-output coin-string="[[ item.buys.unit_price ]]"></gw2-coin-output>
+                Buy: 
+                <gw2-coin-output 
+                  coin-string="[[ item.buys.unit_price ]]">
+                </gw2-coin-output>
               </span>
             </template>
             <template is="dom-if" if="[[ item.sells.unit_price ]]">
               <span class="sell">
-                Sell: <gw2-coin-output coin-string="[[ item.sells.unit_price ]]"></gw2-coin-output>
+                Sell: 
+                  <gw2-coin-output 
+                    coin-string="[[ item.sells.unit_price ]]">
+                  </gw2-coin-output>
               </span>
             </template>
             <template is="dom-if" if="[[ isAccountBound(item.id, itemsResponded) ]]">
