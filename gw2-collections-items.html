@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../gw2-coin-output/gw2-coin-output.html">
 <link rel="import" href="../gw2api-items/gw2api-items.html">
 <link rel="import" href="./gw2api-commerce-prices.html">
 <link rel="import" href="./gw2e-api-skins.html">
@@ -73,8 +74,19 @@
             <span>[[ index ]] - [[ item.name ]]</span>
           </div>
           <div class="item-prices">
-            <span class="buy">Buy: [[ item.buys.unit_price ]]</span>
-            <span class="sell">Sell: [[ item.sells.unit_price ]]</span>
+            <template is="dom-if" if="[[ item.buys.unit_price ]]">
+              <span class="buy">
+                Buy: <gw2-coin-output coin-string="[[ item.buys.unit_price ]]"></gw2-coin-output>
+              </span>
+            </template>
+            <template is="dom-if" if="[[ item.sells.unit_price ]]">
+              <span class="sell">
+                Sell: <gw2-coin-output coin-string="[[ item.sells.unit_price ]]"></gw2-coin-output>
+              </span>
+            </template>
+            <template is="dom-if" if="[[ isAccountBound(item.id, itemsResponded) ]]">
+              <span class="account-bound">Account Bound</span>
+            </template>
           </div>
         </li>
       </template>
@@ -187,7 +199,7 @@
       }
 
       _handleItemResponse(response) {
-        //console.log("Response:", response);
+        //console.log("Item Response:", response);
         this.itemsResponded = response;
         this.$.priceRequester.generateRequest();
 
@@ -206,29 +218,63 @@
       }
 
       _handleItemsResponded(itemsResponded) {
-        console.log(itemsResponded);
+        //console.log(itemsResponded);
       }
 
       _handlePriceResponded(priceResponded) {
         const that = this;
         const itemsResponded = this.itemsResponded;
 
-        console.log("Response:", priceResponded);
-        console.log("Intial Items", itemsResponded);
+        console.log("Response:", Array.isArray(priceResponded));
+        //console.log("Intial Items", itemsResponded);
+        if (Array.isArray(priceResponded)) {
+          priceResponded.forEach(function (price) {
+            const matchIndex = itemsResponded.findIndex(function (entry) {
+              return entry.id === price.id;
+            });
 
-        priceResponded.forEach(function (price) {
+            if (matchIndex !== -1) {
+              that._setBuysSellsWhitelist(price, matchIndex);
+            }
+          });
+        } else {
           const matchIndex = itemsResponded.findIndex(function (entry) {
-            return entry.id === price.id;
+            return entry.id === priceResponded.id;
           });
 
           if (matchIndex !== -1) {
-            that.set('itemsResponded.' + matchIndex + '.buys', price.buys);
-            that.set('itemsResponded.' + matchIndex + '.sells', price.sells);
-            that.set('itemsResponded.' + matchIndex + '.whitelisted', price.whitelisted);
+            that._setBuysSellsWhitelist(priceResponded, matchIndex);
           }
-        });
+        }
 
         return;
+      }
+
+      _setBuysSellsWhitelist(priceObj, matchIndex) {
+        this.set('itemsResponded.' + matchIndex + '.buys', priceObj.buys);
+        this.set('itemsResponded.' + matchIndex + '.sells', priceObj.sells);
+        this.set('itemsResponded.' + matchIndex + '.whitelisted', priceObj.whitelisted);
+      }
+
+      isAccountBound(itemId, items) {
+        //console.log("Checking if " + itemId + " is accountbound...");
+
+        const itemMatchIndex = items.findIndex(function (entry) {
+          return entry.id === itemId;
+        });
+
+        if (itemMatchIndex !== -1) {
+          const flagMatchIndex = items[itemMatchIndex].flags.findIndex(function (flag) {
+            return flag === 'AccountBound';
+          });
+
+          if (flagMatchIndex !== -1) {
+            //console.log("... it is.");
+            return true;
+          }
+        }
+        //console.log("... it is not.");
+        return false;
       }
     }
 
