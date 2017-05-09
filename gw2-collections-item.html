@@ -1,0 +1,135 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../gw2-coin-output/gw2-coin-output.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<!--
+`gw2-collections-item`
+
+@demo demo/index.html
+-->
+
+<dom-module id="gw2-collections-item">
+  <template>
+    <style>
+
+      :host {
+        display: flex;
+        justify-content: space-between;
+        padding: .5rem 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, .12);
+      }
+
+      .item-icon {
+        height: 32px;
+        width: 32px;
+        vertical-align: middle;
+        margin-right: .5rem;
+      }
+
+      .item-header, .item-prices {
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+      }
+
+      .item-prices span {
+        margin-left: 1rem;
+      }
+    </style>
+
+    <div class="item-header">
+      <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
+      <span>[[ item.name ]]</span>
+    </div>
+    <div class="item-prices">
+
+      <template is="dom-if" if="[[ item.buys.unit_price ]]">
+        <span class="buy">
+          Buy: 
+          <gw2-coin-output 
+            coin-string="[[ item.buys.unit_price ]]">
+          </gw2-coin-output>
+        </span>
+      </template>
+
+      <template is="dom-if" if="[[ item.sells.unit_price ]]">
+        <span class="sell">
+          Sell: 
+            <gw2-coin-output 
+              coin-string="[[ item.sells.unit_price ]]">
+            </gw2-coin-output>
+        </span>
+      </template>
+
+      <template is="dom-if" if="[[ item.value ]]">
+        <span class="value">
+            <gw2-coin-output
+              coin-string="[[ item.value ]]">
+            </gw2-coin-output>
+        </span>
+      </template>
+
+      <template is="dom-if" if="[[ hasFlag(item, 'AccountBound') ]]">
+        <span class="accountbound">Account Bound</span>
+      </template>
+
+      <template is="dom-if" if="[[ hasFlag(item, 'SoulbindOnAcquire') ]]">
+        <span class="soulbound">Soulbound</span>
+      </template>
+    </div>
+  </template>
+  <script>
+    /** @polymerElement */
+    class Gw2CollectionsItem extends Polymer.Element {
+      static get is() { return 'gw2-collections-item'; }
+
+      static get properties() {
+        return {
+          item: {
+            type: Object,
+            observer: '_itemObserver'
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        // When possible, use afterNextRender to defer non-critical
+        // work until after first paint.
+        Polymer.RenderStatus.afterNextRender(this, function() {
+        });
+      }
+
+      _itemObserver(item) {
+        console.log("Current item:", item);
+
+        if (item.type === 'Skin') {
+          console.log("this is a skin");
+        }
+      }
+
+      /**
+       * Returns true if matchFlag is in item.flags
+       */ 
+      hasFlag(item, matchFlag) {
+        //console.log("Checking if " + item.id + " has " + matchFlag);
+
+        const flagMatchIndex = item.flags.findIndex(function (flag) {
+          return flag === matchFlag;
+        });
+
+        if (flagMatchIndex !== -1) {
+          //console.log("... it does.");
+          return true;
+        }
+
+        //console.log("... it does not.");
+        return false;
+      }
+    }
+
+    window.customElements.define(Gw2CollectionsItem.is, Gw2CollectionsItem);
+  </script>
+</dom-module>

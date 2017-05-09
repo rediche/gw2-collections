@@ -3,6 +3,7 @@
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../gw2-coin-output/gw2-coin-output.html">
 <link rel="import" href="../gw2api-items/gw2api-items.html">
+<link rel="import" href="./gw2-collections-item.html">
 <link rel="import" href="./gw2api-commerce-prices.html">
 <link rel="import" href="./gw2e-api-skins.html">
 
@@ -20,34 +21,10 @@
         display: block;
       }
 
-      .item-icon {
-        height: 32px;
-        width: 32px;
-        vertical-align: middle;
-        margin-right: .5rem;
-      }
-
       .item-list {
         list-style-type: none;
         padding-left: 0;
         margin: 0;
-      }
-
-      .item {
-        display: flex;
-        justify-content: space-between;
-        padding: .5rem 1rem;
-        border-bottom: 1px solid rgba(0, 0, 0, .12);
-      }
-
-      .item-header, .item-prices {
-        min-height: 32px;
-        display: flex;
-        align-items: center;
-      }
-
-      .item-prices span {
-        margin-left: 1rem;
       }
     </style>
 
@@ -69,45 +46,14 @@
     <ul class="item-list">
       <template is="dom-repeat" items="[[ itemsResponded ]]" as="item">
         <li class="item">
-          <div class="item-header">
-            <img src="[[ item.icon ]]" alt="[[ item.name ]]" class="item-icon">
-            <span>[[ item.name ]]</span>
-          </div>
-          <div class="item-prices">
-            <template is="dom-if" if="[[ item.buys.unit_price ]]">
-              <span class="buy">
-                Buy: 
-                <gw2-coin-output 
-                  coin-string="[[ item.buys.unit_price ]]">
-                </gw2-coin-output>
-              </span>
-            </template>
-            <template is="dom-if" if="[[ item.sells.unit_price ]]">
-              <span class="sell">
-                Sell: 
-                  <gw2-coin-output 
-                    coin-string="[[ item.sells.unit_price ]]">
-                  </gw2-coin-output>
-              </span>
-            </template>
-            <template is="dom-if" if="[[ isAccountBound(item.id, itemsResponded) ]]">
-              <span class="account-bound">Account Bound</span>
-            </template>
-          </div>
+          <gw2-collections-item item="[[ item ]]"></gw2-collections-item>
         </li>
       </template>
-      <!--<template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
+      <template is="dom-repeat" items="[[ skinsResponded ]]" as="skin">
         <li class="item">
-          <div class="item-header">
-            <img src="[[ skin.icon ]]" alt="[[ skin.name ]]" class="item-icon">
-            <span>[[ skin.name ]]</span>
-          </div>
-          <div class="item-prices">
-            <span class="buy">Buy: 1g 2s 3c</span>
-            <span class="sell">Sell: 1g 2s 3c</span>
-          </div>
+          <gw2-collections-item item="[[ skin ]]"></gw2-collections-item>
         </li>
-      </template>-->
+      </template>
     </ul>
   </template>
 
@@ -161,8 +107,7 @@
           },
 
           priceResponsed: {
-            type: Array,
-            observer: '_handlePriceResponded'
+            type: Array
           },
 
           completedItemList: {
@@ -200,7 +145,7 @@
       }
 
       _handleSkinResponse(response) {
-        //console.log("Response:", response);
+        //console.log("Skin Response:", response);
         return this.skinsResponded = response;
       }
 
@@ -231,7 +176,7 @@
         const that = this;
         const itemsResponded = this.itemsResponded;
 
-        console.log("Response:", Array.isArray(priceResponded));
+        //console.log("Response:", Array.isArray(priceResponded));
         //console.log("Intial Items", itemsResponded);
         if (Array.isArray(priceResponded)) {
           priceResponded.forEach(function (price) {
@@ -260,27 +205,6 @@
         this.set('itemsResponded.' + matchIndex + '.buys', priceObj.buys);
         this.set('itemsResponded.' + matchIndex + '.sells', priceObj.sells);
         this.set('itemsResponded.' + matchIndex + '.whitelisted', priceObj.whitelisted);
-      }
-
-      isAccountBound(itemId, items) {
-        //console.log("Checking if " + itemId + " is accountbound...");
-
-        const itemMatchIndex = items.findIndex(function (entry) {
-          return entry.id === itemId;
-        });
-
-        if (itemMatchIndex !== -1) {
-          const flagMatchIndex = items[itemMatchIndex].flags.findIndex(function (flag) {
-            return flag === 'AccountBound';
-          });
-
-          if (flagMatchIndex !== -1) {
-            //console.log("... it is.");
-            return true;
-          }
-        }
-        //console.log("... it is not.");
-        return false;
       }
     }
 
